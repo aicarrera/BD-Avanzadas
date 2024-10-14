@@ -12,4 +12,19 @@
 
    ```bash
    docker-compose up -d
-Acceder a Neo4j: Abre tu navegador y ve a http://localhost:7474. Inicia sesión con el usuario neo4j y la contraseña test.
+Acceder a Neo4j: Abre tu navegador y ve a http://localhost:7474. Inicia sesión con el usuario neo4j y la contraseña .
+
+1. Cargar la base de datos de prueba "Movies" en Neo4j
+Una vez que tienes Neo4j corriendo en un contenedor Docker, puedes usar la interfaz web o el cliente para cargar la base de datos de ejemplo.
+
+Opción A: Desde la interfaz web de Neo4j
+Abre tu navegador y ve a la interfaz web de Neo4j en http://localhost:7474.
+
+Inicia sesión con el usuario y contraseña que configuraste (en este caso neo4j y test).
+
+En la ventana de consultas Cypher, ejecuta el siguiente comando para cargar la base de datos de prueba Movies:
+
+cypher
+Copiar código
+:play movies
+Esto abrirá una pequeña ventana interactiva que te guiará a través de la carga de los datos de películas. Solo tienes que hacer clic en "Run" en los scripts que te aparecen, y Neo4j insertará los nodos y relaciones correspondientes.
