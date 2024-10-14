@@ -5,8 +5,7 @@ services:
     image: neo4j:latest
     container_name: neo4j
     environment:
-      - NEO4J_AUTH=neo4j/testingneo # usuario y clave
-      - NEO4J_dbms_allow_upgrade=true
+      - NEO4J_AUTH=neo4j/test
     ports:
       - "7474:7474"  # Puerto para la interfaz web
       - "7687:7687"  # Puerto para conexiones Bolt
