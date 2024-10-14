@@ -24,7 +24,8 @@ Inicia sesión con el usuario y contraseña que configuraste (en este caso neo4j
 
 En la ventana de consultas Cypher, ejecuta el siguiente comando para cargar la base de datos de prueba Movies:
 
-cypher
 Copiar código
+  ```bash
 :play movies
+
 Esto abrirá una pequeña ventana interactiva que te guiará a través de la carga de los datos de películas. Solo tienes que hacer clic en "Run" en los scripts que te aparecen, y Neo4j insertará los nodos y relaciones correspondientes.
