@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j
+    environment:
+      - NEO4J_AUTH=neo4j/test # usuario y clave
+      - NEO4J_dbms_allow_upgrade=true
+    ports:
+      - "7474:7474"  # Puerto para la interfaz web
+      - "7687:7687"  # Puerto para conexiones Bolt
+    volumes:
+      - neo4j_data:/data  # Persistir datos
+      - ./import:/var/lib/neo4j/import  # Para cargar archivos CSV desde el directorio local
+
+volumes:
+  neo4j_data:
