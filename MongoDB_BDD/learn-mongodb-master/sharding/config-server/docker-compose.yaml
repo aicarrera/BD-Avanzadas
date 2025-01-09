@@ -1,0 +1,58 @@
+services:
+  # Config Servers
+  cfgsvr1:
+    container_name: cfgsvr1
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db --bind_ip 0.0.0.0
+    ports:
+      - 40001:27017
+    volumes:
+      - cfgsvr1:/data/db
+    networks:
+      - mongo-network
+
+  cfgsvr2:
+    container_name: cfgsvr2
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db --bind_ip 0.0.0.0
+    ports:
+      - 40002:27017
+    volumes:
+      - cfgsvr2:/data/db
+    networks:
+      - mongo-network
+
+  cfgsvr3:
+    container_name: cfgsvr3
+    image: mongo
+    command: mongod --configsvr --replSet cfgrs --port 27017 --dbpath /data/db --bind_ip 0.0.0.0
+    ports:
+      - 40003:27017
+    volumes:
+      - cfgsvr3:/data/db
+    networks:
+      - mongo-network
+
+  # Mongos
+  mongos:
+    container_name: mongos
+    image: mongo
+    command: mongos --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017 --bind_ip 0.0.0.0 --port 27017
+    ports:
+      - 60000:27017
+    networks:
+      - mongo-network
+    depends_on:
+      - cfgsvr1
+      - cfgsvr2
+      - cfgsvr3
+
+volumes:
+  cfgsvr1: {}
+  cfgsvr2: {}
+  cfgsvr3: {}
+
+networks:
+  mongo-network:
+    name: mongo-network
+    driver: bridge
