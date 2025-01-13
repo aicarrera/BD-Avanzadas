@@ -5,22 +5,37 @@ Start config servers (3 member replica set)
 ```
 docker-compose -f config-server/docker-compose.yaml up -d
 ```
-Initiate replica set
+To erase all volumes if needed
 ```
-mongo mongodb://192.168.1.81:40001
+docker-compose down --volumes --remove-orphans
+docker volume rm cfgsvr1 cfgsvr2 cfgsvr3
 ```
+
+
+Initiate bash in any configuration server
 ```
-rs.initiate(
-  {
-    _id: "cfgrs",
-    configsvr: true,
-    members: [
-      { _id : 0, host : "192.168.1.81:40001" },
-      { _id : 1, host : "192.168.1.81:40002" },
-      { _id : 2, host : "192.168.1.81:40003" }
-    ]
-  }
-)
+docker exec -it cfgsvr1 bash
+```
+
+Entrar a mongo
+```
+mongosh --host localhost --port 27017
+```
+Revisar el status del replica set
+```
+rs.status()
+```
+Iniciar el configuration server.
+```
+rs.initiate({
+  _id: "cfgrs",
+  configsvr: true,
+  members: [
+    { _id: 0, host: "cfgsvr1:27017" },
+    { _id: 1, host: "cfgsvr2:27017" },
+    { _id: 2, host: "cfgsvr3:27017" }
+  ]
+});
 
 rs.status()
 ```
@@ -30,22 +45,24 @@ Start shard 1 servers (3 member replicas set)
 ```
 docker-compose -f shard1/docker-compose.yaml up -d
 ```
-Initiate replica set
+Initiate bash en shard
 ```
-mongo mongodb://192.168.1.81:50001
+docker exec -it shard1svr1 bash
 ```
-```
-rs.initiate(
-  {
-    _id: "shard1rs",
-    members: [
-      { _id : 0, host : "192.168.1.81:50001" },
-      { _id : 1, host : "192.168.1.81:50002" },
-      { _id : 2, host : "192.168.1.81:50003" }
-    ]
-  }
-)
 
+Entrar a mongo
+```
+mongosh --host localhost --port 27017
+```
+```
+rs.initiate({
+  _id: "shard1rs",
+  members: [
+    { _id: 0, host: "shard1svr1:27017" },
+    { _id: 1, host: "shard1svr2:27017" },
+    { _id: 2, host: "shard1svr3:27017" }
+  ]
+});
 rs.status()
 ```
 
@@ -62,7 +79,7 @@ mongo mongodb://192.168.1.81:60000
 ```
 Add shard
 ```
-mongos> sh.addShard("shard1rs/192.168.1.81:50001,192.168.1.81:50002,192.168.1.81:50003")
+mongos>  sh.addShard("shard1rs/shard1svr1:27017,shard1svr2:27017,shard1svr3:27017")
 mongos> sh.status()
 ```
 ## Adding another shard
